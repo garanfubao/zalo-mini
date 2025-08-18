@@ -1,7 +1,7 @@
 {
   "app": {
     "appId": "2550431164744910512",
-    "appName": "Gà Rán FKT",
+    "title": "Gà Rán FKT",
     "headerTitle": "Gà Rán FKT",
     "headerColor": "#e11d2e",
     "textColor": "white",
@@ -13,13 +13,20 @@
     "selfControlLoading": false
   },
   "pages": [
-    "pages/index/index"
+    { "path": "pages/Home", "title": "Home" },
+    { "path": "pages/Cart", "title": "Cart" },
+    { "path": "pages/Profile", "title": "Profile" },
+    { "path": "pages/Orders", "title": "Orders" },
+    { "path": "pages/Addresses", "title": "Addresses" },
+    { "path": "pages/Checkout", "title": "Checkout" },
+    { "path": "pages/Messages", "title": "Messages" },
+    { "path": "pages/ProfileEdit", "title": "Profile Edit" },
+    { "path": "pages/Vouchers", "title": "Vouchers" }
   ],
-  "permission": [
-    "zalopay.recharge",
-    "zalopay.pay"
-  ],
-  "listSyncJS": ["./assets/index-CLhTdynG.js"],
+  "permission": {
+    "request": []
+  },
+  "listSyncJS": ["./assets/index-DrdS_dhH.js"],
   "listAsyncJS": [],
-  "listCSS": ["./assets/index-Cx_sz-2Q.css"]
+  "listCSS": ["./assets/index-DsqbBCoS.css"]
 }
