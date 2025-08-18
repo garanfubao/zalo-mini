@@ -1,0 +1,25 @@
+{
+  "app": {
+    "appId": "2550431164744910512",
+    "appName": "Gà Rán FKT",
+    "headerTitle": "Gà Rán FKT",
+    "headerColor": "#e11d2e",
+    "textColor": "white",
+    "leftButton": "back",
+    "statusBar": "normal",
+    "actionBarHidden": false,
+    "hideAndroidBottomNavigationBar": false,
+    "hideIOSSafeAreaBottom": false,
+    "selfControlLoading": false
+  },
+  "pages": [
+    "pages/index/index"
+  ],
+  "permission": [
+    "zalopay.recharge",
+    "zalopay.pay"
+  ],
+  "listSyncJS": ["./assets/index-CLhTdynG.js"],
+  "listAsyncJS": [],
+  "listCSS": ["./assets/index-Cx_sz-2Q.css"]
+}
