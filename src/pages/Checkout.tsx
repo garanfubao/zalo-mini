@@ -24,15 +24,28 @@ export default function CheckoutPage(){
   const address = getDefault()
   const [note, setNote] = useState('')
   const [done, setDone] = useState<{id:string; total:number} | null>(null)
+  const [code, setCode] = useState('')
+  const [voucher, setVoucher] = useState<{percent:number;max:number;min:number}|null>(null)
 
   const subTotal = useMemo(()=> items.reduce((s,i)=>s+i.qty*i.product.price,0),[items])
   const shippingFee = useMemo(()=> subTotal >= FREESHIP_THRESHOLD ? 0 : SHIP_FLAT, [subTotal])
-  const discount = 0
+  const discount = useMemo(()=> voucher ? Math.min(subTotal * voucher.percent/100, voucher.max) : 0,[voucher, subTotal])
   const total = Math.max(0, subTotal + shippingFee - discount)
+  
+  function applyCode(){
+    const c = code.trim().toUpperCase()
+    if(c === 'SALE15' && subTotal >= 200000){
+      setVoucher({percent:15,max:50000,min:200000})
+    }else{
+      alert('Mã không hợp lệ hoặc chưa đủ điều kiện')
+      setVoucher(null)
+    }
+  }
+
 
   async function placeOrder(){
     if (!items.length) return
-    if (!address) { alert('Vui lòng thêm địa chỉ giao hàng'); nav('/addresses'); return }
+    if (!address) { alert('Vui lòng thêm địa chỉ giao hàng'); nav('/addresses?new=1'); return }
     const order: Order = {
       id: 'ORD'+Date.now(),
       items, subTotal, shippingFee, discount, total, note,
@@ -59,7 +72,7 @@ export default function CheckoutPage(){
               <div className="text-sm text-gray-600">{address.line1}, {address.ward}, {address.district}, {address.province}</div></div>
             ) : <div className="text-sm text-gray-500 mt-1">Vui lòng thêm địa chỉ để giao hàng</div>}
           </div>
-          <button className="btn-outline" onClick={()=>nav('/addresses')}>{address?'Thay đổi':'Thêm'}</button>
+          <button className="btn-outline" onClick={()=>nav('/addresses?new=1')}>{address?'Thay đổi':'Thêm'}</button>
         </div>
       </div>
 
@@ -94,16 +107,20 @@ export default function CheckoutPage(){
       <section className="px-4 mt-3">
         <div className="card p-4">
           <div className="text-lg font-semibold mb-2">Thanh toán</div>
+          <div className="mb-2 flex gap-2">
+            <input className="flex-1 border rounded-xl p-2 h-11" placeholder="Mã giảm giá" value={code} onChange={e=>setCode(e.target.value)} />
+            <button className="btn-outline" onClick={applyCode}>Áp dụng</button>
+          </div>
           <Row label="Tạm tính" value={`${subTotal.toLocaleString('vi-VN')} đ`} />
           <Row label="Phí vận chuyển" value={`${shippingFee.toLocaleString('vi-VN')} đ`} />
           <Row label="Giảm giá" value={`-${discount.toLocaleString('vi-VN')} đ`} orange />
         </div>
       </section>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area">
+      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area">
         <div className="flex items-center gap-3">
           <div className="text-sm">Tổng thanh toán:</div>
-          <div className="text-2xl font-extrabold text-brand">{total.toLocaleString('vi-VN')} đ</div>
+          <div className="text-lg md:text-2xl font-extrabold text-brand">{total.toLocaleString('vi-VN')} đ</div>
           <button className="btn-primary ml-auto" disabled={!items.length} onClick={placeOrder}>Đặt hàng</button>
         </div>
       </div>

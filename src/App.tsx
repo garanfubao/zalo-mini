@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import BottomNav from '@/components/BottomNav'
 import Home from '@/pages/Home'
 import Cart from '@/pages/Cart'
@@ -23,6 +23,7 @@ export default function App() {
         <Route path="/addresses" element={<Addresses />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/vouchers" element={<Vouchers />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
     </div>

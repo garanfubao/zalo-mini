@@ -5,6 +5,7 @@ type Profile = { fullName: string; phone: string; email?: string; birthday?: str
 type UserState = {
   profile: Profile
   addresses: Address[]
+  setAddresses: (a: Address[]) => void
   setProfile: (p: Partial<Profile>) => void
   addAddress: (a: Address) => void
   updateAddress: (a: Address) => void
@@ -19,6 +20,10 @@ function save(s:{profile:Profile;addresses:Address[]}){ localStorage.setItem(KEY
 export const useUser = create<UserState>((set, get) => ({
   profile: load()?.profile ?? { fullName: 'Bạn', phone: '' },
   addresses: load()?.addresses ?? [],
+  setAddresses: (a) => set(() => {
+    const cur = get(); const next = { ...cur, addresses: a }
+    save({ profile: next.profile, addresses: next.addresses }); return next
+  }),
   setProfile: (p) => set(() => {
     const cur = get(); const next = { ...cur, profile: { ...cur.profile, ...p } }
     save({ profile: next.profile, addresses: next.addresses }); return next
