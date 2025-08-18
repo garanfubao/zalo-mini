@@ -8,3 +8,4 @@ export type Order = {
   id: string; items: CartItem[]; total: number; subTotal?: number; shippingFee?: number; discount?: number;
   note?: string; createdAt: string; paymentStatus: 'unpaid' | 'paid' | 'cod'; method?: 'cod'|'bank'|'zalopay'; status?: OrderStatus; address?: Address
 }
+export type Coupon = { code: string; percent: number; max: number; min: number; start: string; end: string }

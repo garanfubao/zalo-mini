@@ -3,10 +3,10 @@ exports. default = {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      colors: { brand: '#e11d2e' },
+      colors: { brand: '#FFCD29' },
       boxShadow: { soft: '0 6px 20px rgba(0,0,0,0.08)' }
     }
   },
   plugins: []
 }
- /* v7-011ad361e6460735 */
+ /* v7-2362905313f86d4f */

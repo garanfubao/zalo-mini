@@ -1,9 +1,9 @@
 {
   "app": {
     "appId": "2550431164744910512",
-    "title": "Gà Rán FKT",
-    "headerTitle": "Gà Rán FKT",
-    "headerColor": "#e11d2e",
+    "title": "Gà Rán Fubao",
+    "headerTitle": "Gà Rán Fubao",
+    "headerColor": "#E0A000",
     "textColor": "white",
     "leftButton": "back",
     "statusBar": "normal",
@@ -26,7 +26,7 @@
   "permission": {
     "request": []
   },
-  "listSyncJS": ["./assets/index-DrdS_dhH.js"],
+  "listSyncJS": ["./assets/index-D2oggUOC.js"],
   "listAsyncJS": [],
-  "listCSS": ["./assets/index-DsqbBCoS.css"]
+  "listCSS": ["./assets/index-DLNpf05e.css"]
 }

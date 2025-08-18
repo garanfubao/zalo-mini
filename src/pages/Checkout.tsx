@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '@/store/cart'
 import { useOrders } from '@/store/orders'
 import { useUser } from '@/store/user'
-import type { Order } from '@/types'
+import type { Order, Coupon } from '@/types'
 
 const SHIP_FLAT = 0
 const FREESHIP_THRESHOLD = 300000
@@ -31,17 +31,30 @@ export default function CheckoutPage(){
   const shippingFee = useMemo(()=> subTotal >= FREESHIP_THRESHOLD ? 0 : SHIP_FLAT, [subTotal])
   const discount = useMemo(()=> voucher ? Math.min(subTotal * voucher.percent/100, voucher.max) : 0,[voucher, subTotal])
   const total = Math.max(0, subTotal + shippingFee - discount)
-  
-  function applyCode(){
+
+  async function applyCode(){
     const c = code.trim().toUpperCase()
-    if(c === 'SALE15' && subTotal >= 200000){
-      setVoucher({percent:15,max:50000,min:200000})
-    }else{
-      alert('Mã không hợp lệ hoặc chưa đủ điều kiện')
+    if(!c) return
+    try{
+      const ENV = ((import.meta as any).env as { VITE_API_URL: string })
+      const resp = await fetch(`${ENV.VITE_API_URL}/api/coupons?code=${encodeURIComponent(c)}`)
+      if(!resp.ok) throw new Error('invalid')
+      const coup: Coupon = await resp.json()
+      const now = Date.now()
+      if(now < new Date(coup.start).getTime() || now > new Date(coup.end).getTime()){
+        alert('Mã đã hết hạn hoặc chưa bắt đầu')
+        setVoucher(null); return
+      }
+      if(subTotal < coup.min){
+        alert('Chưa đạt giá trị tối thiểu để áp mã')
+        setVoucher(null); return
+      }
+      setVoucher({percent:coup.percent,max:coup.max,min:coup.min})
+    }catch{
+      alert('Mã không hợp lệ')
       setVoucher(null)
     }
   }
-
 
   async function placeOrder(){
     if (!items.length) return
@@ -117,7 +130,7 @@ export default function CheckoutPage(){
         </div>
       </section>
 
-      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area">
+      <div className="fixed left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area bottom-nav-offset">
         <div className="flex items-center gap-3">
           <div className="text-sm">Tổng thanh toán:</div>
           <div className="text-lg md:text-2xl font-extrabold text-brand">{total.toLocaleString('vi-VN')} đ</div>
@@ -126,7 +139,7 @@ export default function CheckoutPage(){
       </div>
 
       {done && (
-        <div className="fixed inset-0 bg-black/40 flex items-end">
+        <div className="fixed inset-0 bg-black/40 flex items-end z-50">
           <div className="bg-white w-full rounded-t-3xl p-5">
             <div className="text-2xl font-extrabold text-brand">Đặt hàng thành công</div>
             <div className="mt-1 text-gray-600">Mã đơn <b>#{done.id}</b></div>

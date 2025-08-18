@@ -31,7 +31,7 @@ export default function CartPage() {
           </div>
         ))}
       </div>
-      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area">
+      <div className="fixed left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area bottom-nav-offset">
         <div className="flex items-center gap-3">
           <div className="font-semibold">Tạm tính:</div>
           <div className="text-lg md:text-2xl font-extrabold text-brand">{subTotal.toLocaleString('vi-VN')} đ</div>

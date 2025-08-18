@@ -24,17 +24,36 @@ type Address = {
   line1: string
   isDefault?: boolean
 }
+type Coupon = {
+  code: string
+  percent: number
+  max: number
+  min: number
+  start: string
+  end: string
+}
 const DATA_DIR = path.join(__dirname, 'data')
-const DATA_FILE = path.join(DATA_DIR, 'addresses.json')
+const ADDR_FILE = path.join(DATA_DIR, 'addresses.json')
+const COUPON_FILE = path.join(DATA_DIR, 'coupons.json')
 let addresses: Address[] = []
+let coupons: Coupon[] = []
 try {
-  addresses = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'))
+  addresses = JSON.parse(fs.readFileSync(ADDR_FILE, 'utf8'))
 } catch {
   addresses = []
 }
-function persist() {
+try {
+  coupons = JSON.parse(fs.readFileSync(COUPON_FILE, 'utf8'))
+} catch {
+  coupons = []
+}
+function persistAddresses() {
   fs.mkdirSync(DATA_DIR, { recursive: true })
-  fs.writeFileSync(DATA_FILE, JSON.stringify(addresses, null, 2))
+  fs.writeFileSync(ADDR_FILE, JSON.stringify(addresses, null, 2))
+}
+function persistCoupons() {
+  fs.mkdirSync(DATA_DIR, { recursive: true })
+  fs.writeFileSync(COUPON_FILE, JSON.stringify(coupons, null, 2))
 }
 
 app.get('/', (_, res) => res.json({ ok: true }))
@@ -80,8 +99,27 @@ app.post('/api/addresses', (req, res) => {
   const addr: Address = req.body || {}
   if (!addr.id) addr.id = 'ADDR' + Date.now()
   addresses.unshift(addr)
-  persist()
+  persistAddresses()
   res.json(addr)
+})
+
+app.get('/api/coupons', (_, res) => {
+  res.json(coupons)
+})
+
+app.post('/api/coupons', (req, res) => {
+  const c: Coupon = req.body || {}
+  c.code = c.code?.toUpperCase() || 'C' + Date.now()
+  coupons = coupons.filter(x => x.code !== c.code)
+  coupons.unshift(c)
+  persistCoupons()
+  res.json(c)
+})
+
+app.get('/api/coupons/:code', (req, res) => {
+  const c = coupons.find(x => x.code === req.params.code.toUpperCase())
+  if (!c) return res.status(404).json({ error: 'Not found' })
+  res.json(c)
 })
 
 app.listen(PORT, () => console.log('API listening on ' + PORT))
