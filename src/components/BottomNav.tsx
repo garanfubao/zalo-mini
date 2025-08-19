@@ -32,12 +32,14 @@ function Item({ to, label, icon }: ItemProps) {
   return (
     <Link
       to={to}
-      className={'flex-1 text-center pt-1 ' + (active ? 'text-brand' : 'text-gray-600')}
+      className={'flex-1 text-center pt-1 ' + (active ? 'text-brandbg-[#E0A000]/10 text-[#E0A000]' : 'text-gray-600')}
     >
       <div className={'mx-auto w-8 h-8 rounded-full flex items-center justify-center ' + (active ? 'bg-brand/10' : '')}>
         {icon}
       </div>
-      <div className="text-xs mt-1">{label}</div>
+      <div className={'text-xs mt-1 ' + (active ? 'text-[#E0A000] font-semibold' : 'text-gray-600')}>
+        {label}
+      </div>
     </Link>
   )
 }

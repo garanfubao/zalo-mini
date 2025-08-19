@@ -9,8 +9,11 @@ export default defineConfig({
   },
   server: { host: true, port: 5173 },
   preview: { port: 5173 },
-    build: {
+  build: {
     target: 'es2020',
-    outDir: 'www'
+    outDir: 'www',   // chỉ build ra www
+    emptyOutDir: true // xoá sạch www trước khi build (tránh file thừa)
   }
 })
+
+

@@ -2,9 +2,17 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './styles.css'
-// Ensure a mount node exists. Zalo Mini App may execute the bundle without
-// injecting the usual <div id="root" /> from index.html, which would cause
-// React to throw "Target container is not a DOM element" (error #299).
+
+// Chỉ bật eruda nếu ENV cho phép
+if (import.meta.env.DEV && process.env.ENABLE_ERUDA === 'true') {
+  const script = document.createElement('script')
+  script.src =
+    'https://miniapp.zaloplatforms.com/debugger/eruda-3.0.0-zmp.min.js'
+  script.onload = () => (window as any).eruda?.init?.()
+  document.head.appendChild(script)
+}
+
+// Ensure a mount node exists
 const root =
   document.getElementById('root') ??
   (() => {

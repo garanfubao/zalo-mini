@@ -1,11 +1,12 @@
 {
-  "name": "zalo-miniapp-food",
+  "name": "garanfubao-miniapp-food",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "clean": "rimraf www",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/update-app-config.js",
     "preview": "vite preview",
     "serve:api": "tsx server/index.ts"
   },
@@ -30,6 +31,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.41",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.10",
     "tsx": "^4.19.0",
     "typescript": "^5.5.4",
